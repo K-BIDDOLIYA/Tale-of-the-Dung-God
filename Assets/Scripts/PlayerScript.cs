@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +9,9 @@ public class PlayerScript : MonoBehaviour
 {
     public float jumpForce;
     public float speedMultiplier;
+    private SpriteRenderer sr;
     private Rigidbody2D rb;
+    public Animator anim;
     private InputAction moveAction;
     private InputAction jumpAction;
     private InputAction sprintAction;
@@ -23,9 +27,7 @@ public class PlayerScript : MonoBehaviour
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
         sprintAction = InputSystem.actions.FindAction("Sprint");
-        
-        
-        
+        sr = GetComponent<SpriteRenderer>();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -51,8 +53,9 @@ public class PlayerScript : MonoBehaviour
         {
             StartCoroutine(Sprint());
         } 
-        
         rb.linearVelocity = new Vector2(move * speedMultiplier, rb.linearVelocity.y);
+        sr.flipX = (move < 0) || sr.flipX && move == 0;
+        anim.SetInteger("Movement", Math.Abs((int)rb.linearVelocity.x));
     }
 
     private IEnumerator Sprint()
