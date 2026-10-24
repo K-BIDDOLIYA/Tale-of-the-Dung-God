@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class PlayerScript : MonoBehaviour
 {
     public float jumpForce;
-    public float speedMultiplier;
+    public float speedMultiplier = 2f;
     private SpriteRenderer sr;
     private Rigidbody2D rb;
     public Animator anim;
@@ -42,27 +42,24 @@ public class PlayerScript : MonoBehaviour
     
     void Update()
     {
-        float move = moveAction.ReadValue<Vector2>().x;
+        float move = moveAction.ReadValue<Vector2>().x * 1.2f;
         if (jumpAction.WasPressedThisFrame() && isGrounded)
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             isGrounded = false;
         }
 
+        var jumpStatus = (isGrounded);
+        anim.SetBool("IsJumping", !jumpStatus);
+        
         if (sprintAction.IsPressed())
         {
-            StartCoroutine(Sprint());
-        } 
+            speedMultiplier = 3f; 
+        }
+
         rb.linearVelocity = new Vector2(move * speedMultiplier, rb.linearVelocity.y);
         sr.flipX = (move < 0) || sr.flipX && move == 0;
         anim.SetInteger("Movement", Math.Abs((int)rb.linearVelocity.x));
-    }
-
-    private IEnumerator Sprint()
-    {
-        speedMultiplier = 3f; 
-       yield return new WaitForSeconds(1.2f);
-       speedMultiplier = 2f;
     }
 }
 
