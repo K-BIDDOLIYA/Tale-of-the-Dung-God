@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 253846900}
   m_Layer: 0
   m_Name: grnd (6)
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -270,7 +270,7 @@ GameObject:
   - component: {fileID: 384289510}
   m_Layer: 0
   m_Name: grnd (5)
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -499,7 +499,7 @@ GameObject:
   - component: {fileID: 511607222}
   m_Layer: 0
   m_Name: grnd (3)
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -823,7 +823,7 @@ GameObject:
   - component: {fileID: 1177328587}
   m_Layer: 0
   m_Name: grnd
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1142,7 +1142,7 @@ GameObject:
   - component: {fileID: 1332511893}
   m_Layer: 0
   m_Name: grnd (1)
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1282,7 +1282,7 @@ GameObject:
   - component: {fileID: 1349314419}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1447,18 +1447,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56f9c05c67231a34297baa397c10d110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerScript
-  moveSpeed: 5
-  sprintMultiplier: 2.3
   jumpForce: 5
-  attackPoint: {fileID: 1349314418}
-  attackRange: 1.5
-  attackDamage: 3
-  attackCooldown: 0.4
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  maxHealth: 3
-  hearts: []
+  speedMultiplier: 2
+  isGrounded: 1
 --- !u!1 &1406518719
 GameObject:
   m_ObjectHideFlags: 0
@@ -1543,6 +1534,7 @@ GameObject:
   - component: {fileID: 1578144168}
   - component: {fileID: 1578144167}
   - component: {fileID: 1578144165}
+  - component: {fileID: 1578144171}
   m_Layer: 0
   m_Name: enemy
   m_TagString: Untagged
@@ -1564,6 +1556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Guard
   speed: 2
   patrolDistance: 4
+  patrolState: 1
   maxHealth: 3
 --- !u!50 &1578144167
 Rigidbody2D:
@@ -1712,6 +1705,42 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1578144171
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578144164}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 2.43
 --- !u!1 &1626747163
 GameObject:
   m_ObjectHideFlags: 0
@@ -1725,7 +1754,7 @@ GameObject:
   - component: {fileID: 1626747165}
   m_Layer: 0
   m_Name: grnd (2)
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
