@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -44,8 +45,8 @@ public class PlayerScript : MonoBehaviour
     public float attackDuration = 0.3f;
 
     private bool isAttacking;
-    private readonly System.Collections.Generic.HashSet<Guard> hitGuards
-        = new System.Collections.Generic.HashSet<Guard>();
+
+    private readonly HashSet<Guard> hitGuards = new HashSet<Guard>();
 
     private void Awake()
     {
@@ -76,6 +77,10 @@ public class PlayerScript : MonoBehaviour
 
         if (knifeCollider != null)
             knifeCollider.enabled = false;
+        else
+            Debug.LogWarning(
+                "Assign the knife's Collider2D to Knife Collider in the Inspector."
+            );
 
         UpdateHearts();
 
@@ -85,13 +90,6 @@ public class PlayerScript : MonoBehaviour
         {
             Debug.LogError(
                 "Missing Input Actions! Make sure Move, Jump, and Sprint exist."
-            );
-        }
-
-        if (knifeCollider == null)
-        {
-            Debug.LogWarning(
-                "Assign the knife's Collider2D to Knife Collider in the Inspector."
             );
         }
     }
@@ -134,7 +132,7 @@ public class PlayerScript : MonoBehaviour
         if (sr != null)
             sr.flipX = facingDirection < 0;
 
-        // Keep the knife positioned in front of the player.
+        // Keep the knife in front of the player.
         if (knifeCollider != null)
         {
             Vector3 knifePosition = knifeCollider.transform.localPosition;
@@ -145,7 +143,7 @@ public class PlayerScript : MonoBehaviour
             knifeCollider.transform.localPosition = knifePosition;
         }
 
-        // Attack with right mouse button
+        // Right-click to attack.
         if (Mouse.current != null &&
             Mouse.current.rightButton.wasPressedThisFrame &&
             Time.time >= nextAttackTime)
@@ -169,6 +167,8 @@ public class PlayerScript : MonoBehaviour
                 "Movement",
                 Mathf.RoundToInt(Mathf.Abs(rb.linearVelocity.x))
             );
+
+            anim.SetBool("IsJumping", !isGrounded);
         }
     }
 
@@ -213,7 +213,7 @@ public class PlayerScript : MonoBehaviour
 
         knifeCollider.enabled = true;
 
-        // Detect guards already touching the knife when the attack begins.
+        // Check for guards already touching the knife.
         CheckKnifeOverlaps();
 
         yield return new WaitForSeconds(attackDuration);
@@ -233,7 +233,6 @@ public class PlayerScript : MonoBehaviour
         filter.NoFilter();
 
         Collider2D[] results = new Collider2D[20];
-
         int count = knifeCollider.Overlap(filter, results);
 
         for (int i = 0; i < count; i++)
@@ -243,14 +242,9 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    // Called when the active knife trigger touches another collider.
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!isAttacking || isDead || knifeCollider == null)
-            return;
-
-        // Only process collisions involving the knife collider.
-        if (other == knifeCollider)
             return;
 
         TryDamageGuard(other);
@@ -333,9 +327,7 @@ public class PlayerScript : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("GuardBody"))
-        {
             TakeDamage(1);
-        }
 
         CheckGround(collision);
     }
@@ -362,6 +354,7 @@ public class PlayerScript : MonoBehaviour
         if (knifeCollider != null)
         {
             Gizmos.color = Color.red;
+
             Gizmos.DrawWireCube(
                 knifeCollider.bounds.center,
                 knifeCollider.bounds.size
@@ -369,5 +362,4 @@ public class PlayerScript : MonoBehaviour
         }
     }
 }
-
 
