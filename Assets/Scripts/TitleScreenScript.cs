@@ -10,7 +10,7 @@ public class TitleScreenScript : MonoBehaviour
 
   public void Settings()
   {
-      //TODO: Write a settings thing.
+      GameObject.Find("PauseScreen").GetComponent<Canvas>().enabled = true;
   }
   
   public void QuitGame()

@@ -12,14 +12,14 @@ public class PlayerScript : MonoBehaviour
 
     private SpriteRenderer sr;
     private Rigidbody2D rb;
-
     [Header("Animation")]
     public Animator anim;
 
     private InputAction moveAction;
     private InputAction jumpAction;
     private InputAction sprintAction;
-
+    private InputAction pauseAction;
+    private InputAction attackAction;
     public bool isGrounded = true;
 
     [Header("Death UI")]
@@ -59,6 +59,8 @@ public class PlayerScript : MonoBehaviour
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
         sprintAction = InputSystem.actions.FindAction("Sprint");
+        pauseAction = InputSystem.actions.FindAction("Pause");
+        attackAction = InputSystem.actions.FindAction("Attack");
     }
 
     private void OnEnable()
@@ -66,6 +68,7 @@ public class PlayerScript : MonoBehaviour
         moveAction?.Enable();
         jumpAction?.Enable();
         sprintAction?.Enable();
+        attackAction?.Enable();
     }
 
     private void Start()
@@ -122,6 +125,7 @@ public class PlayerScript : MonoBehaviour
 
             isGrounded = false;
         }
+        
 
         // Update facing direction
         if (move < -0.01f)
@@ -169,6 +173,17 @@ public class PlayerScript : MonoBehaviour
             );
 
             anim.SetBool("IsJumping", !isGrounded);
+        }
+
+        if (pauseAction.IsPressed())
+        {
+            Time.timeScale = 0f;
+            GameObject.Find("PauseScreen").GetComponent<Canvas>().enabled = true;
+        }
+
+        if (attackAction.IsPressed())
+        {
+            anim.SetTrigger("IsAttacking");
         }
     }
 

@@ -3,7 +3,7 @@ using UnityEngine;
 public class CamTrack2D : MonoBehaviour
 {
     public Transform target;
-    public Vector3 offset = new Vector3(0, 2, -10);
+    public Vector3 offset = new(0, 2, -10);
     public float smoothTime = 0.3f;
     private Vector3 _currentVelocity;
 
