@@ -42725,7 +42725,7 @@ MonoBehaviour:
   clickSFX: {fileID: 8300000, guid: 4fd360824b6e962458cdaab9acc28300, type: 3}
   hitSFX: {fileID: 8300000, guid: bbf387507af338f42af5d06de04f27af, type: 3}
   damageSFX: {fileID: 0}
-  collectSFX: {fileID: 0}
+  collectSFX: {fileID: 8300000, guid: 5dacbfd54a67c41469fac0f71a91d992, type: 3}
   winSFX: {fileID: 0}
   deathSFX: {fileID: 0}
   bgmVolume: 0.5
