@@ -129,9 +129,13 @@ public class PlayerScript : MonoBehaviour
 
         // Update facing direction
         if (move < -0.01f)
+        {
             facingDirection = -1;
+        }
         else if (move > 0.01f)
+        {
             facingDirection = 1;
+        }
 
         if (sr != null)
             sr.flipX = facingDirection < 0;

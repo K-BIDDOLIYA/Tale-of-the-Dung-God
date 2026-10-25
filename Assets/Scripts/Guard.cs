@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Guard : MonoBehaviour
@@ -5,7 +6,7 @@ public class Guard : MonoBehaviour
     [Header("Patrol Settings")]
     public float speed = 2f;
     public float patrolDistance = 3f;
-
+    private SpriteRenderer spriteRenderer;
     [Header("Combat Settings")]
     public int maxHealth = 2;
 
@@ -17,12 +18,20 @@ public class Guard : MonoBehaviour
 
     private void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         leftLimit = transform.position.x - patrolDistance;
         rightLimit = transform.position.x + patrolDistance;
 
         currentHealth = maxHealth;
     }
 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.name == "Hitbox")
+        {
+            TakeDamage(1);
+        }
+    } 
     private void Update()
     {
         if (isDead)
@@ -61,11 +70,18 @@ public class Guard : MonoBehaviour
             return;
 
         currentHealth = Mathf.Max(0, currentHealth - damage);
-
+        StartCoroutine(Hurt());
         Debug.Log("Guard health: " + currentHealth);
 
         if (currentHealth <= 0)
             Die();
+    }
+
+    private IEnumerator Hurt()
+    {
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.5f);
+        spriteRenderer.color = Color.white;
     }
 
     private void Die()
