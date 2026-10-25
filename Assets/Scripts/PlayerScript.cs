@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerScript : MonoBehaviour
@@ -293,8 +294,8 @@ public class PlayerScript : MonoBehaviour
     public void TakeDamage(int damage)
     {
         if (isDead)
-            return;
-
+           SceneManager.LoadScene("GameOver"); 
+            
         currentHealth = Mathf.Clamp(
             currentHealth - damage,
             0,
