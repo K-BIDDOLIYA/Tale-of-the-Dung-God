@@ -8,6 +8,8 @@ TagManager:
   - GuardBody
   - pauseScreen
   - OOB
+  - Enemy
+  - element
   layers:
   - Default
   - TransparentFX

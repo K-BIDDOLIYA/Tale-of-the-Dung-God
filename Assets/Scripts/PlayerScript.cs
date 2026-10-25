@@ -10,7 +10,8 @@ public class PlayerScript : MonoBehaviour
     [Header("Movement")]
     public float jumpForce = 8f;
     public float speedMultiplier = 2f;
-
+    
+    
     private SpriteRenderer sr;
     private Rigidbody2D rb;
     [Header("Animation")]
@@ -41,8 +42,6 @@ public class PlayerScript : MonoBehaviour
     private int facingDirection = 1;
     private bool isSprinting;
 
-    [Header("Knife Attack")]
-    public Collider2D knifeCollider;
     public float attackDuration = 0.3f;
 
     private bool isAttacking;
@@ -79,12 +78,6 @@ public class PlayerScript : MonoBehaviour
         if (deathPanel != null)
             deathPanel.SetActive(false);
 
-        if (knifeCollider != null)
-            knifeCollider.enabled = false;
-        else
-            Debug.LogWarning(
-                "Assign the knife's Collider2D to Knife Collider in the Inspector."
-            );
 
         UpdateHearts();
 
@@ -142,15 +135,6 @@ public class PlayerScript : MonoBehaviour
             sr.flipX = facingDirection < 0;
 
         // Keep the knife in front of the player.
-        if (knifeCollider != null)
-        {
-            Vector3 knifePosition = knifeCollider.transform.localPosition;
-
-            knifePosition.x =
-                Mathf.Abs(knifePosition.x) * facingDirection;
-
-            knifeCollider.transform.localPosition = knifePosition;
-        }
 
         // Right-click to attack.
         if (Mouse.current != null &&
@@ -225,46 +209,22 @@ public class PlayerScript : MonoBehaviour
     // KNIFE ATTACK
     private IEnumerator Attack()
     {
-        if (isDead || knifeCollider == null || isAttacking)
+        if (isDead || isAttacking)
             yield break;
 
         isAttacking = true;
         hitGuards.Clear();
 
-        knifeCollider.enabled = true;
-
-        // Check for guards already touching the knife.
-        CheckKnifeOverlaps();
 
         yield return new WaitForSeconds(attackDuration);
-
-        if (knifeCollider != null)
-            knifeCollider.enabled = false;
 
         isAttacking = false;
     }
 
-    private void CheckKnifeOverlaps()
-    {
-        if (knifeCollider == null)
-            return;
-
-        ContactFilter2D filter = new ContactFilter2D();
-        filter.NoFilter();
-
-        Collider2D[] results = new Collider2D[20];
-        int count = knifeCollider.Overlap(filter, results);
-
-        for (int i = 0; i < count; i++)
-        {
-            if (results[i] != null)
-                TryDamageGuard(results[i]);
-        }
-    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isAttacking || isDead || knifeCollider == null)
+        if (!isAttacking || isDead )
             return;
 
         TryDamageGuard(other);
@@ -290,8 +250,9 @@ public class PlayerScript : MonoBehaviour
         Debug.Log("Knife hit guard!");
     }
 
+    
     // PLAYER HEALTH
-    public void TakeDamage(int damage)
+    private void TakeDamage(int damage)
     {
         if (isDead)
            SceneManager.LoadScene("GameOver"); 
@@ -324,29 +285,22 @@ public class PlayerScript : MonoBehaviour
 
     private void Die()
     {
-        if (isDead)
-            return;
-
-        isDead = true;
 
         rb.linearVelocity = Vector2.zero;
         rb.simulated = false;
 
-        if (knifeCollider != null)
-            knifeCollider.enabled = false;
-
-        if (deathPanel != null)
-            deathPanel.SetActive(true);
-
+        
+        
         Time.timeScale = 0f;
 
         Debug.Log("The mummy has been defeated!");
+        SceneManager.LoadScene("GameOver");
     }
 
     // PLAYER COLLISIONS
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("GuardBody"))
+        if (collision.collider.CompareTag("Enemy"))
             TakeDamage(1);
 
         CheckGround(collision);
@@ -369,17 +323,5 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (knifeCollider != null)
-        {
-            Gizmos.color = Color.red;
-
-            Gizmos.DrawWireCube(
-                knifeCollider.bounds.center,
-                knifeCollider.bounds.size
-            );
-        }
-    }
 }
 

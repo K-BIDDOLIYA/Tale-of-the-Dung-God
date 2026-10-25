@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class ElementManager : MonoBehaviour
 {
@@ -12,8 +13,6 @@ public class ElementManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TMP_Text elementText;
 
-    [Header("Portal")]
-    [SerializeField] private GameObject portal;
 
     private void Awake()
     {
@@ -31,8 +30,6 @@ public class ElementManager : MonoBehaviour
         collectedElements = 0;
         UpdateElementText();
 
-        if (portal != null)
-            portal.SetActive(false);
     }
 
     public void CollectElement()
@@ -54,14 +51,12 @@ public class ElementManager : MonoBehaviour
     private void UpdateElementText()
     {
         if (elementText != null)
-            elementText.text = collectedElements + "/" + totalElements;
+            elementText.text = collectedElements + "/" + totalElements + " Elements";
     }
 
     private void UnlockPortal()
     {
-        if (portal != null)
-            portal.SetActive(true);
-
+        SceneManager.LoadScene("TitleScreen");
         Debug.Log("All elements collected! Portal unlocked.");
     }
 
